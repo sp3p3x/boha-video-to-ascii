@@ -19,7 +19,7 @@ def vid_to_img(video_path, vid_name, generation):
     if generation:
         os.mkdir(vid_name+'_Images')
         while success:
-            cv2.imwrite(vid_name+"_Images/Image{0}.jpg".format(str(counter)), image)
+            cv2.imwrite(vid_name+"_Images/Image{0}.png".format(str(counter)), image)
             success, image = video.read()
             print(f"Frame number: {counter}/{frame_count}")
             counter+=1
