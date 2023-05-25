@@ -1,4 +1,4 @@
-import cv2, os
+import cv2, os, shutil
 
 def vid_to_img(video_path, vid_name, generation):
     video = cv2.VideoCapture(video_path)
@@ -29,3 +29,20 @@ def vid_to_img(video_path, vid_name, generation):
         counter += file_count
 
     return fps, (counter-1)
+
+def main(video_path):
+    video_path=str(video_path)
+    vid_name=video_path.split(sep="/")
+    vid_name=str(vid_name[len(vid_name)-1])
+    vid_name=vid_name.removesuffix(".mp4")
+
+    if img_exist:
+        func=input("Use cached PNG? [y/n]: ")
+        if func == "y":
+            generate_img=False
+        elif func == "n":
+            shutil.rmtree(vid_name+"_Images", ignore_errors=True)
+            generate_img=True                     
+            img_exist=True
+
+    fps,number_images = vid_to_img(video_path,vid_name,generate_img)
