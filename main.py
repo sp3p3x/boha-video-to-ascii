@@ -1,4 +1,4 @@
-import cv2, os, shutil
+import cv2, os, shutil, sys
 
 def vid_to_img(video_path, vid_name, generation):
     video = cv2.VideoCapture(video_path)
@@ -46,3 +46,12 @@ def main(video_path):
             img_exist=True
 
     fps,number_images = vid_to_img(video_path,vid_name,generate_img)
+
+if len(sys.argv) != 2:
+    print("Usage: ./converter.py <video_path>")
+    sys.exit()
+
+video_path = str(sys.argv[1])
+
+if __name__ == '__main__':
+    main(video_path)
