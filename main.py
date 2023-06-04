@@ -58,6 +58,26 @@ def rgb_ascii(ascii_list, image, color,image_pos,vid_name):
         </html>""")                
     file.close() 
 
+def bw_ascii(ascii_list, image, image_pos,vid_name):
+    file = open(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(image_pos)),"w") 
+    file.write("""                                                                                              
+            <!DOCTYPE html>
+            <html>
+            <body style='background-color:black'>
+            <pre style='display: inline-block; border-width: 4px 6px; border-color: black; border-style: solid; background-color:black; font-size: 32px ;font-face: Montserrat;font-weight: bold;line-height:60%'>""") 
+
+    width, height = image.size
+    counter = 0                       
+    for j in ascii_list:
+        counter+=1
+        if (counter % width) != 0:                 
+            file.write("<span style= color:#ffffff>{0}</span>".format(j))    
+        else:
+            file.write("<br />") 
+    file.write("""</pre></body>
+        </html>""")                
+    file.close() 
+
 def main(video_path):
     video_path=str(video_path)
     vid_name=video_path.split(sep="/")
