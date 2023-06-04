@@ -100,6 +100,25 @@ def bw_ascii(ascii_list, image, image_pos,vid_name):
         </html>""")                
     file.close() 
 
+def export_video(vid_name, fps, number_images):
+    print("Generating RGB ASCII video...")
+    res = Image.open(vid_name+'_TextImages/Image1.jpg').size 
+    video = cv2.VideoWriter(vid_name+'_rgb_ascii.mp4',cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),int(fps),res)
+    for j in range(1,number_images+1):                 
+        print("Writing frames... [{0}/{1}]".format(j,number_images+1))              
+        video.write(cv2.imread(vid_name+'_TextImages/Image{0}.jpg'.format(str(j)))) 
+    video.release()
+    print("RGB ASCII Video Exported...")
+
+    print("Generating BW ASCII video...")
+    res = Image.open(vid_name+'_bwTextImages/bwImage1.jpg').size 
+    video = cv2.VideoWriter(vid_name+'_bw_ascii.mp4',cv2.VideoWriter_fourcc('m', 'p', '4', 'v'),int(fps),res)
+    for j in range(1,number_images+1):                 
+        print("Writing frames... [{0}/{1}]".format(j,number_images+1))              
+        video.write(cv2.imread(vid_name+'_bwTextImages/bwImage{0}.jpg'.format(str(j)))) 
+    video.release()
+    print("BW ASCII Video Exported...")
+
 def main(video_path):
     config = imgkit.config(wkhtmltoimage=r'wkhtmltoimage.exe')     
 
@@ -107,6 +126,9 @@ def main(video_path):
     vid_name=video_path.split(sep="/")
     vid_name=str(vid_name[len(vid_name)-1])
     vid_name=vid_name.removesuffix(".mp4")
+
+    generate_img = True
+    img_exist = os.path.isdir(vid_name+"_Images/") 
 
     if img_exist:
         func=input("Use cached PNG? [y/n]: ")
@@ -130,7 +152,10 @@ def main(video_path):
         rgb_ascii(converted_list, correctedImage,color_list,i,vid_name)
         imgkit.from_file(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(i)), vid_name+'_bwTextImages/bwImage{0}.jpg'.format(str(i)), config = config) 
         imgkit.from_file(vid_name+'_HtmlImages/Html{0}.html'.format(str(i)), vid_name+'_TextImages/Image{0}.jpg'.format(str(i)), config = config) 
-        
+    
+    print("Rendering complete!")
+
+    export_video(vid_name, fps, number_images)
 
 if len(sys.argv) != 2:
     print("Usage: ./converter.py <video_path>")
