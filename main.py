@@ -214,11 +214,14 @@ def main(video_path):
         bw_image = grayscale_image(correctedImage)             
         converted_list = ascii_conversion(bw_image) 
         color_list = get_color(correctedImage)
-        bw_ascii(converted_list, correctedImage,i,vid_name)
-        rgb_ascii(converted_list, correctedImage,color_list,i,vid_name)
-        imgkit.from_file(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(i)), vid_name+'_bwTextImages/bwImage{0}.png'.format(str(i)), config = config) 
-        imgkit.from_file(vid_name+'_HtmlImages/Html{0}.html'.format(str(i)), vid_name+'_TextImages/Image{0}.png'.format(str(i)), config = config) 
-    
+        if generate_bwhtml:
+            bw_ascii(converted_list, correctedImage,i,vid_name)
+        if generate_html:
+            rgb_ascii(converted_list, correctedImage,color_list,i,vid_name)
+        if generate_bwtxt:
+            imgkit.from_file(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(i)), vid_name+'_bwTextImages/bwImage{0}.jpg'.format(str(i)), config = config) 
+        if generate_txt:
+            imgkit.from_file(vid_name+'_HtmlImages/Html{0}.html'.format(str(i)), vid_name+'_TextImages/Image{0}.jpg'.format(str(i)), config = config) 
     print("Rendering complete!")
 
     export_video(vid_name, fps, number_images)
