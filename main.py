@@ -127,8 +127,25 @@ def main(video_path):
     vid_name=str(vid_name[len(vid_name)-1])
     vid_name=vid_name.removesuffix(".mp4")
 
-    generate_img = True
+    generate_img = generate_html = generate_txt = generate_bwhtml = generate_bwtxt = True
     img_exist = os.path.isdir(vid_name+"_Images/") 
+    bwhtml_exist = os.path.isdir(vid_name+'_bwHtmlImages/')                                      
+    html_exist = os.path.isdir(vid_name+'_HtmlImages/')                                       
+    bwtxt_exist  = os.path.isdir(vid_name+'_bwTextImages/')
+    txt_exist = os.path.isdir(vid_name+'_TextImages/')
+
+    print("Default Charset:")
+    print("[' ','.',':','-','=','+','`',''','*','#','%','@','&']")
+    func=input("Use Default Charset? [y/n]: ")
+    if func == "y":
+        print("Using Default Charset...")
+    elif func == "n":        
+        charset_foobar=str(input("Enter Charset [seperated by commas]: "))
+        charset=[" "]
+        for i in charset_foobar.split(','):
+            charset.append(i.strip())
+        print("Using Custom Charset:")
+        print(charset)
 
     if img_exist:
         func=input("Use cached PNG? [y/n]: ")
@@ -138,6 +155,55 @@ def main(video_path):
             shutil.rmtree(vid_name+"_Images", ignore_errors=True)
             generate_img=True                     
             img_exist=True
+
+    if html_exist:
+        func=input("Use cached HTML? [y/n]: ")
+        if func == "y":
+            generate_html=False
+        elif func == "n":
+            shutil.rmtree(vid_name+"_HtmlImages", ignore_errors=True)
+            os.mkdir(vid_name+'_HtmlImages')   
+            generate_html=True                     
+
+    if txt_exist:
+        func=input("Use cached TXT JPG? [y/n]: ")
+        if func == "y":
+            generate_txt=False
+        elif func == "n":
+            shutil.rmtree(vid_name+"_TextImages", ignore_errors=True)
+            os.mkdir(vid_name+'_TextImages')    
+            generate_txt=True                     
+
+    if bwhtml_exist:
+        func=input("Use cached BW HTML? [y/n]: ")
+        if func == "y":
+            generate_bwhtml=False
+        elif func == "n":
+            shutil.rmtree(vid_name+"_bwHtmlImages", ignore_errors=True)
+            os.mkdir(vid_name+'_bwHtmlImages')
+            generate_bwhtml=True                     
+
+    if bwtxt_exist:
+        func=input("Use cached BW TXT JPG? [y/n]: ")
+        if func == "y":
+            generate_bwtxt=False
+        elif func == "n":
+            shutil.rmtree(vid_name+"_bwTextImages", ignore_errors=True)
+            os.mkdir(vid_name+'_bwTextImages')
+            generate_bwtxt=True      
+
+    if bwhtml_exist==False:
+        print(html_exist)
+        os.mkdir(vid_name+'_bwHtmlImages')   
+
+    if html_exist==False:
+        os.mkdir(vid_name+'_HtmlImages')    
+
+    if bwtxt_exist==False:
+        os.mkdir(vid_name+'_bwTextImages')
+
+    if txt_exist==False:
+        os.mkdir(vid_name+'_TextImages')
 
     fps,number_images = vid_to_img(video_path,vid_name,generate_img)
 
