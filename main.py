@@ -37,6 +37,27 @@ def get_image_info(image_path):
     initial_image = initial_image.resize((round(width*1.05),height)) 
     return initial_image        
 
+def rgb_ascii(ascii_list, image, color,image_pos,vid_name):
+    file = open(vid_name+'_HtmlImages/Html{0}.html'.format(str(image_pos)),"w") 
+    file.write("""                                                                                              
+            <!DOCTYPE html>
+            <html>
+            <body style='background-color:black'>
+            <pre style='display: inline-block; border-width: 4px 6px; border-color: black; border-style: solid; background-color:black; font-size: 32px ;font-face: Montserrat;font-weight: bold;line-height:60%'>""") 
+
+    width, height = image.size
+    counter = 0                       
+    for j in ascii_list:
+        color_hex = '%02x%02x%02x' % color[counter] 
+        counter+=1
+        if (counter % width) != 0:                 
+            file.write("<span style=\"color: #{0}\">{1}</span>".format(color_hex,j))    
+        else:
+            file.write("<br />") 
+    file.write("""</pre></body>
+        </html>""")                
+    file.close() 
+
 def main(video_path):
     video_path=str(video_path)
     vid_name=video_path.split(sep="/")
