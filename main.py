@@ -1,4 +1,5 @@
 import cv2, os, shutil, sys
+from PIL import Image
 
 def vid_to_img(video_path, vid_name, generation):
     video = cv2.VideoCapture(video_path)
@@ -29,6 +30,12 @@ def vid_to_img(video_path, vid_name, generation):
         counter += file_count
 
     return fps, (counter-1)
+
+def get_image_info(image_path):
+    initial_image = Image.open(image_path)     
+    width,height = initial_image.size                     
+    initial_image = initial_image.resize((round(width*1.05),height)) 
+    return initial_image        
 
 def main(video_path):
     video_path=str(video_path)
