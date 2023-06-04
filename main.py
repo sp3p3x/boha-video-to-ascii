@@ -1,4 +1,4 @@
-import cv2, os, shutil, sys
+import cv2, os, shutil, sys, imgkit
 from PIL import Image, ImageOps
 
 def vid_to_img(video_path, vid_name, generation):
@@ -101,6 +101,8 @@ def bw_ascii(ascii_list, image, image_pos,vid_name):
     file.close() 
 
 def main(video_path):
+    config = imgkit.config(wkhtmltoimage=r'wkhtmltoimage.exe')     
+
     video_path=str(video_path)
     vid_name=video_path.split(sep="/")
     vid_name=str(vid_name[len(vid_name)-1])
@@ -117,7 +119,7 @@ def main(video_path):
 
     fps,number_images = vid_to_img(video_path,vid_name,generate_img)
 
-    for i in range(1,number_images+1):     
+    for i in range(1,number_images+1):
         print("Rendering... [{0}/{1}]".format(i,number_images+1))              
         image = get_image_info(vid_name+'_Images/Image{0}.jpg'.format(str(i)))
         correctedImage = correctSize(image)
@@ -126,6 +128,8 @@ def main(video_path):
         color_list = get_color(correctedImage)
         bw_ascii(converted_list, correctedImage,i,vid_name)
         rgb_ascii(converted_list, correctedImage,color_list,i,vid_name)
+        imgkit.from_file(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(i)), vid_name+'_bwTextImages/bwImage{0}.jpg'.format(str(i)), config = config) 
+        imgkit.from_file(vid_name+'_HtmlImages/Html{0}.html'.format(str(i)), vid_name+'_TextImages/Image{0}.jpg'.format(str(i)), config = config) 
         
 
 if len(sys.argv) != 2:
