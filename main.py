@@ -37,6 +37,12 @@ def get_image_info(image_path):
     initial_image = initial_image.resize((round(width*1.05),height)) 
     return initial_image        
 
+def correctSize(image, final_width = 200):
+    width, height = image.size                     
+    final_height = int((height*final_width)/width)    
+    image = image.resize((final_width,final_height)) 
+    return image
+
 def rgb_ascii(ascii_list, image, color,image_pos,vid_name):
     file = open(vid_name+'_HtmlImages/Html{0}.html'.format(str(image_pos)),"w") 
     file.write("""                                                                                              
@@ -94,6 +100,11 @@ def main(video_path):
             img_exist=True
 
     fps,number_images = vid_to_img(video_path,vid_name,generate_img)
+
+    for i in range(1,number_images+1):     
+        print("Rendering... [{0}/{1}]".format(i,number_images+1))              
+        image = get_image_info(vid_name+'_Images/Image{0}.jpg'.format(str(i)))
+        correctedImage = correctSize(image)                
 
 if len(sys.argv) != 2:
     print("Usage: ./converter.py <video_path>")
