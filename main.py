@@ -1,5 +1,5 @@
 import cv2, os, shutil, sys
-from PIL import Image
+from PIL import Image, ImageOps
 
 def vid_to_img(video_path, vid_name, generation):
     video = cv2.VideoCapture(video_path)
@@ -42,6 +42,22 @@ def correctSize(image, final_width = 200):
     final_height = int((height*final_width)/width)    
     image = image.resize((final_width,final_height)) 
     return image
+
+def grayscale_image(image):
+    image_bw = ImageOps.grayscale(image) 
+    return image_bw
+
+def ascii_conversion(bw_image,ascii_string = [" ",".",":","-","=","+","`","'","*","#","%","@","&"]): 
+    pixels = bw_image.getdata()           
+    ascii_image_list = []             
+    for pixel in pixels:               
+        ascii_converted = int((pixel*len(ascii_string))/256) 
+        ascii_image_list.append(ascii_string[ascii_converted]) 
+    return ascii_image_list 
+
+def get_color(image):                
+    pixels = image.getdata()
+    return pixels
 
 def rgb_ascii(ascii_list, image, color,image_pos,vid_name):
     file = open(vid_name+'_HtmlImages/Html{0}.html'.format(str(image_pos)),"w") 
@@ -104,7 +120,13 @@ def main(video_path):
     for i in range(1,number_images+1):     
         print("Rendering... [{0}/{1}]".format(i,number_images+1))              
         image = get_image_info(vid_name+'_Images/Image{0}.jpg'.format(str(i)))
-        correctedImage = correctSize(image)                
+        correctedImage = correctSize(image)
+        bw_image = grayscale_image(correctedImage)             
+        converted_list = ascii_conversion(bw_image) 
+        color_list = get_color(correctedImage)
+        bw_ascii(converted_list, correctedImage,i,vid_name)
+        rgb_ascii(converted_list, correctedImage,color_list,i,vid_name)
+        
 
 if len(sys.argv) != 2:
     print("Usage: ./converter.py <video_path>")
