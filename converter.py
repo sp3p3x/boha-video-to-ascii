@@ -1,3 +1,5 @@
+# checkout html2image, htmlwebshot
+
 import cv2, os, shutil, sys, imgkit
 from PIL import Image, ImageOps
 
@@ -225,6 +227,9 @@ def main(video_path):
     print("Rendering complete!")
 
     export_video(vid_name, fps, number_images)
+
+# if sys.platform == "linux":
+    
 
 if len(sys.argv) != 2:
     print("Usage: ./converter.py <video_path>")
