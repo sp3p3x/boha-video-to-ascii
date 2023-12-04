@@ -57,7 +57,7 @@ def ascii_conversion(bw_image,ascii_string = [" ",".",":","-","=","+","`","'","*
         ascii_image_list.append(ascii_string[ascii_converted]) 
     return ascii_image_list 
 
-def get_color(image):                
+def get_color(image):
     pixels = image.getdata()
     return pixels
 
@@ -122,8 +122,6 @@ def export_video(vid_name, fps, number_images):
     print("BW ASCII Video Exported...")
 
 def main(video_path):
-    config = imgkit.config(wkhtmltoimage=r'wkhtmltoimage.exe')     
-
     video_path=str(video_path)
     vid_name=video_path.split(sep="/")
     vid_name=str(vid_name[len(vid_name)-1])
@@ -221,15 +219,12 @@ def main(video_path):
         if generate_html:
             rgb_ascii(converted_list, correctedImage,color_list,i,vid_name)
         if generate_bwtxt:
-            imgkit.from_file(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(i)), vid_name+'_bwTextImages/bwImage{0}.png'.format(str(i)), config = config) 
+            imgkit.from_file(vid_name+'_bwHtmlImages/bwHtml{0}.html'.format(str(i)), vid_name+'_bwTextImages/bwImage{0}.png'.format(str(i))) 
         if generate_txt:
-            imgkit.from_file(vid_name+'_HtmlImages/Html{0}.html'.format(str(i)), vid_name+'_TextImages/Image{0}.png'.format(str(i)), config = config) 
+            imgkit.from_file(vid_name+'_HtmlImages/Html{0}.html'.format(str(i)), vid_name+'_TextImages/Image{0}.png'.format(str(i))) 
     print("Rendering complete!")
 
-    export_video(vid_name, fps, number_images)
-
-# if sys.platform == "linux":
-    
+    export_video(vid_name, fps, number_images)   
 
 if len(sys.argv) != 2:
     print("Usage: ./converter.py <video_path>")
